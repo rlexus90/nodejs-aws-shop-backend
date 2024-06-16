@@ -2,14 +2,11 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-		// "paths": {
-		// 	"/opt/*": ["/src/lambda-layer/*"]
-		// },
     "lib": [
       "es2020",
       "dom"
     ],
-    "declaration": true,
+    "declaration": false,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,

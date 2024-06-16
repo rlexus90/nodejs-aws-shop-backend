@@ -2,15 +2,15 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 const { aws_lambda: lambda } = cdk;
 
-export class GetProductsLambda extends Construct {
-  getProducts: cdk.aws_lambda.IFunction;
+export class GetProductsIdLambda extends Construct {
+  getProduct: cdk.aws_lambda.IFunction;
 
   constructor (scope: Construct, id: string){
     super(scope, id);
 
-    this.getProducts = new lambda.Function(this, 'Get-Products-List', {
+    this.getProduct = new lambda.Function(this, 'Get-Product-ID', {
       runtime: lambda.Runtime.NODEJS_20_X,
-      code: lambda.Code.fromAsset('dist/getProductsList'),
+      code: lambda.Code.fromAsset('dist/getProductId'),
       handler: 'index.handler',
     });
 
