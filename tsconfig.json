@@ -2,6 +2,9 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
+		// "paths": {
+		// 	"/opt/*": ["/src/lambda-layer/*"]
+		// },
     "lib": [
       "es2020",
       "dom"
@@ -26,6 +29,6 @@
   },
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
   ]
 }
