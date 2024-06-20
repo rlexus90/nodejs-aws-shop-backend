@@ -11,7 +11,9 @@
     "cdk": "cdk",
     "bundle": "webpack",
     "deploy": "npm run bundle && cdk synth && cdk deploy",
-    "destroy": "cdk destroy -f"
+    "destroy": "cdk destroy -f",
+    "create-bd:all": "ts-node  scripts/create_ProductsDB.ts && ts-node  scripts/create_StocksDB.ts",
+    "fill:bd": "ts-node  scripts/filByMockData.ts"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -25,6 +27,9 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.602.0",
+    "@aws-sdk/lib-dynamodb": "^3.602.0",
+    "@aws-sdk/util-dynamodb": "^3.602.0",
     "@types/aws-lambda": "^8.10.138",
     "aws-cdk-lib": "2.146.0",
     "clean-webpack-plugin": "^4.0.0",
