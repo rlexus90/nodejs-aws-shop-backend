@@ -1,12 +1,15 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { returnProducts } from '../src/lib/returnProducts';
 import { handler } from '../src/lambdas/getProductId';
+import { products } from '../src/mock/mockData';
 
-const products = returnProducts();
+
 
 test('Function return product by id', async () => {
-  const resp = await handler({ pathParameters: { productId: products[0].id } } as unknown as APIGatewayProxyEvent);
-  expect(resp.statusCode).toBe(200);
+  const resp = await handler({ pathParameters: { productId: '7567ec4b-b10c-48c5-9345-fc73c48a80aa'} } as unknown as APIGatewayProxyEvent);
+  console.log(resp.body)
+	
+	expect(resp.statusCode).toBe(200);
   expect(JSON.parse(resp.body)).toEqual(products[0]);
 });
 
