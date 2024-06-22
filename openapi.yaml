@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: My AWS education project
+  description: My AWS education project
+  version: 0.1.0
+servers:
+  - url: https://svedox86v6.execute-api.eu-west-2.amazonaws.com
+tags:
+  - name: Products
+    description: Access to products data
+paths:
+  /product:
+    get:
+      tags:
+        - products
+      summary: Get products list
+      description: List of products.
+      operationId: getProducts
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Products'
+                maxItems: 100
+  /product/{productId}:
+    get:
+      tags:
+        - products
+      summary: Find product by ID
+      description: Returns a single product.
+      operationId: getProductById
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to return
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '403':
+          description: Missing product id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage1'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMessage2'
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
+        title:
+          type: string
+          example: ProductOne
+        description:
+          type: string
+          example: Short Product Description1
+        price:
+          type: integer
+          example: 24
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
+        title:
+          type: string
+          example: ProductOne
+        description:
+          type: string
+          example: Short Product Description1
+        price:
+          type: integer
+          example: 24
+    ErrorMessage1:
+      type: object
+      properties:
+        message:
+          type: string
+          example: You must enter Id
+    ErrorMessage2:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Product not found

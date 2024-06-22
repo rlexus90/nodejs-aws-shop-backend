@@ -1,16 +1,15 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
+import { GetProductsAPI } from '../src/API/getProduct-api';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
+const { aws_lambda: lambda, aws_apigateway: apigateway } = cdk;
+
 export class NodejsAwsShopBackendStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    new GetProductsAPI(this, 'API');
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'NodejsAwsShopBackendQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
   }
 }
