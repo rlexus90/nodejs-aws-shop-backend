@@ -18,8 +18,8 @@ const createProduct = async () => {
       },
     ],
     ProvisionedThroughput: {
-      ReadCapacityUnits: 5,
-      WriteCapacityUnits: 5,
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
     },
   });
 

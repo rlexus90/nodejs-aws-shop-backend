@@ -17,8 +17,8 @@ export class GetProductsLambda extends Construct {
       code: lambda.Code.fromAsset('dist/getProductsList'),
       handler: 'index.handler',
       environment: {
-        PRODUCTS_DB: process.env.PRODUCTS_DB || 'AWS_Shop_Products',
-        STOCKS_DB: process.env.STOCKS_DB || 'AWS_Shop_Stocks',
+        PRODUCTS_DB: process.env.PRODUCTS_DB || 'string',
+        STOCKS_DB: process.env.STOCKS_DB || 'string',
       },
     });
 

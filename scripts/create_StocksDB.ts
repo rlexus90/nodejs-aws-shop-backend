@@ -18,8 +18,8 @@ const client = new DynamoDBClient({});
       },
     ],
     ProvisionedThroughput: {
-      ReadCapacityUnits: 5,
-      WriteCapacityUnits: 5,
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1,
     },
   });
 

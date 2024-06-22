@@ -2,11 +2,9 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { GetProductsLambda } from '../lambdas/getProducts-lambda';
 import { GetProductsIdLambda } from '../lambdas/getProductId-lambda';
-import { IFunction } from 'aws-cdk-lib/aws-lambda';
-const {
-  aws_apigatewayv2: apigateway,
-  aws_apigatewayv2_integrations: integrations,
-} = cdk;
+import { CreateProductLambda } from '../lambdas/createProduct-lambda';
+
+const { aws_apigatewayv2: apigateway } = cdk;
 
 export class GetProductsAPI extends Construct {
   constructor(scope: Construct, id: string) {
@@ -15,6 +13,9 @@ export class GetProductsAPI extends Construct {
     const getProducts = new GetProductsLambda(this, 'Get Products').integration;
 
     const getProductId = new GetProductsIdLambda(this, 'Get product bby Id')
+      .integration;
+
+    const createProduct = new CreateProductLambda(this, 'Create Product')
       .integration;
 
     const api = new apigateway.HttpApi(scope, 'Get Products API');
@@ -29,6 +30,12 @@ export class GetProductsAPI extends Construct {
       path: '/product/{productId}',
       methods: [apigateway.HttpMethod.GET],
       integration: getProductId,
+    });
+
+    api.addRoutes({
+      path: '/product',
+      methods: [apigateway.HttpMethod.POST],
+      integration: createProduct,
     });
   }
 }
