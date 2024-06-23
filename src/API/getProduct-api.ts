@@ -21,19 +21,19 @@ export class GetProductsAPI extends Construct {
     const api = new apigateway.HttpApi(scope, 'Get Products API');
 
     api.addRoutes({
-      path: '/product',
+      path: '/products',
       methods: [apigateway.HttpMethod.GET],
       integration: getProducts,
     });
 
     api.addRoutes({
-      path: '/product/{productId}',
+      path: '/products/{productId}',
       methods: [apigateway.HttpMethod.GET],
       integration: getProductId,
     });
 
     api.addRoutes({
-      path: '/product',
+      path: '/products',
       methods: [apigateway.HttpMethod.POST],
       integration: createProduct,
     });
