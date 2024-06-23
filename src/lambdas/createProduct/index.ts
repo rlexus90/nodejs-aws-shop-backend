@@ -3,7 +3,7 @@ import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEventV2 } from 'aws-lambda/trigger/api-gateway-proxy';
 import * as dotenv from 'dotenv';
 import * as uuid from 'uuid';
-import { CreateProductDTO } from '../../API/DTO/createProductDTO';
+import { CreateProductDTO, validateBody } from './DTO/createProductDTO';
 import { returnResponse } from '../../lib/returnResponse';
 import { ProductDB, StocksDB } from '../../types/product';
 import { logger } from '../../lib/logger';
@@ -13,17 +13,17 @@ dotenv.config();
 export const handler = async (event: APIGatewayProxyEventV2) => {
   logger(event);
 
+  const err = validateBody(event.body);
+  if (err) return returnResponse(400, err);
+
   const { PRODUCTS_DB, STOCKS_DB } = process.env;
 
   const client = new DynamoDBClient({});
   const docClient = DynamoDBDocumentClient.from(client);
 
-  if (!event.body)
-    return returnResponse(400, { message: 'Body can not be empty' });
-
   try {
     const { count, price, description, title } = JSON.parse(
-      event.body
+      event.body as string
     ) as CreateProductDTO;
 
     const id = uuid.v4();
