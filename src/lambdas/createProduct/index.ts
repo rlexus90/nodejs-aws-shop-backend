@@ -1,5 +1,8 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  TransactWriteCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { APIGatewayProxyEventV2 } from 'aws-lambda/trigger/api-gateway-proxy';
 import * as dotenv from 'dotenv';
 import * as uuid from 'uuid';
@@ -37,19 +40,25 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
       product_id: id,
       count,
     };
-    await docClient.send(
-      new PutCommand({
-        TableName: PRODUCTS_DB,
-        Item: product,
-      })
-    );
 
-    await docClient.send(
-      new PutCommand({
-        TableName: STOCKS_DB,
-        Item: stock,
-      })
-    );
+    const command = new TransactWriteCommand({
+      TransactItems: [
+        {
+          Put: {
+            TableName: PRODUCTS_DB,
+            Item: product,
+          },
+        },
+        {
+          Put: {
+            TableName: STOCKS_DB,
+            Item: stock,
+          },
+        },
+      ],
+    });
+
+    await docClient.send(command);
 
     return returnResponse(201, {});
   } catch (e) {
