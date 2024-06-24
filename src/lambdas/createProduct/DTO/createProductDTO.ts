@@ -1,5 +1,3 @@
-
-
 export type CreateProductDTO = {
   count: number;
   description: string;
@@ -36,5 +34,5 @@ export const validateBody = (body: string | undefined): void | object => {
 
   if (messages.length === 0) return;
 
-  return  { message: messages };
+  return { message: messages };
 };

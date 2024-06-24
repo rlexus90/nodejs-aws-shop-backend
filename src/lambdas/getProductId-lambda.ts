@@ -9,21 +9,20 @@ dotenv.config();
 export class GetProductsIdLambda extends Construct {
   integration: HttpLambdaIntegration;
 
-  constructor (scope: Construct, id: string){
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const lambdaFunc = new lambda.Function(this, 'Get-Product-ID', {
       runtime: lambda.Runtime.NODEJS_20_X,
       code: lambda.Code.fromAsset('dist/getProductId'),
       handler: 'index.handler',
-			environment: {
+      environment: {
         PRODUCTS_DB: process.env.PRODUCTS_DB || 'string',
         STOCKS_DB: process.env.STOCKS_DB || 'string',
       },
     });
 
-
-		this.integration = new HttpLambdaIntegration(
+    this.integration = new HttpLambdaIntegration(
       'Get products by Id integration',
       lambdaFunc
     );

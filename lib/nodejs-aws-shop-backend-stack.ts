@@ -10,6 +10,5 @@ export class NodejsAwsShopBackendStack extends cdk.Stack {
     super(scope, id, props);
 
     new GetProductsAPI(this, 'API');
-
   }
 }

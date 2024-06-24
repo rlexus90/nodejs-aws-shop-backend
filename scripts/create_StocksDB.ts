@@ -2,7 +2,7 @@ import { CreateTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 
 const client = new DynamoDBClient({});
 
- const createStocks = async () => {
+const createStocks = async () => {
   const command = new CreateTableCommand({
     TableName: 'AWS_Shop_Stocks',
     AttributeDefinitions: [
