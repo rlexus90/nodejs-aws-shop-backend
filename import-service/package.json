@@ -9,7 +9,8 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-		"deploy": "cdk synth && cdk deploy"
+    "prettier": "prettier --write '*/**/*.{js,jsx,ts,tsx,css,json,scss}' --config ./.prettierrc",
+    "deploy": "npm run build && cdk synth && cdk deploy"
   
   },
   "devDependencies": {
@@ -24,6 +25,7 @@
   "dependencies": {
     "aws-cdk-lib": "2.146.0",
     "constructs": "^10.0.0",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "prettier": "^3.3.2"
   }
 }
