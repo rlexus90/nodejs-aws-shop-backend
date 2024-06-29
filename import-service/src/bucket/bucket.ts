@@ -1,6 +1,7 @@
 import {
   CreateBucketCommand,
   GetBucketLocationCommand,
+  PutBucketCorsCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 
@@ -14,6 +15,21 @@ export const bucket = async () => {
     },
   });
 
+  const cors = new PutBucketCorsCommand({
+    Bucket: 'aws-shop-import',
+    CORSConfiguration: {
+      CORSRules: [
+        {
+          AllowedHeaders: ['*'],
+          AllowedMethods: ['PUT', 'POST', 'DELETE'],
+          AllowedOrigins: ['*'],
+          ExposeHeaders: [],
+          MaxAgeSeconds: 3000,
+        },
+      ],
+    },
+  });
+
   try {
     await client.send(
       new GetBucketLocationCommand({
@@ -24,6 +40,7 @@ export const bucket = async () => {
   } catch {
     try {
       const { Location } = await client.send(command);
+      await client.send(cors);
       console.log(`aws-shop-import created with location ${Location}`);
     } catch (err) {
       console.error(err);

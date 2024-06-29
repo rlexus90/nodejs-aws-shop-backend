@@ -58,7 +58,7 @@ export const createApi = async () => {
       })
     );
 
-    const data = await client.send(
+    await client.send(
       new CreateDeploymentCommand({
         ApiId,
         StageName: createStageResult.StageName,

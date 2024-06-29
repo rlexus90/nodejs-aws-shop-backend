@@ -6,8 +6,7 @@ import ZipPlugin = require("zip-webpack-plugin")
 const config = {
   entry: {
     ["import-file"]: "./src/lambdas/import-file/index.ts",
-    ["second"]: "./src/lambdas/second/index.ts",
-    // ["createProduct"]: "./src/lambdas/createProduct/index.ts",
+    ["importFileParser"]: "./src/lambdas/importFileParser/index.ts",
   },
   target: "node",
   output: {
