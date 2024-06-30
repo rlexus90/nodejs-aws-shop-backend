@@ -20,6 +20,7 @@ export const api = async () => {
           ApiId: key,
         })
       );
+      console.log('API exist');
     } catch {
       await rm(infoFile);
       await createApi();
