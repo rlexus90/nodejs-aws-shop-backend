@@ -6,7 +6,7 @@
       "es2020",
       "dom"
     ],
-    "declaration": false,
+    "declaration": true,
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -24,9 +24,9 @@
       "./node_modules/@types"
     ]
   },
+	// "include": ["src/lambdas/**/*.ts"],
   "exclude": [
     "node_modules",
-    "cdk.out",
-"test"
+    "cdk.out"
   ]
 }
