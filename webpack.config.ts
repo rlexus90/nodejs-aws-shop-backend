@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     ["getProductsList"]: "./src/lambdas/getProductsList/index.ts",
     ["getProductId"]: "./src/lambdas/getProductId/index.ts",
+		["createProduct"]: "./src/lambdas/createProduct/index.ts",
   },
   target: "node",
   output: {
@@ -28,4 +29,7 @@ module.exports = {
   },
   mode: "production",
   plugins: [new CleanWebpackPlugin()],
+  watchOptions:{
+    ignored: '**/test',
+  } 
 };
