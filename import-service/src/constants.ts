@@ -8,4 +8,5 @@ export const names = {
   catalogBatchProcessLambdaName: 'Catalog-batch-process',
   bucketName: 'aws-shop-import',
   queueName: 'Create-product-queue',
+  emailNotify: 'Email-notification-Product-Create',
 };

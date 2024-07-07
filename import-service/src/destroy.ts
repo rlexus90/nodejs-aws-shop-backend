@@ -34,7 +34,9 @@ const destroy = async () => {
 
   // await Lambda.send(new DeleteFunctionCommand({FunctionName:names.importLambdaName}));
 
-  // await Lambda.send(new DeleteFunctionCommand({FunctionName:names.fileParserLambdaName}));
+  // await Lambda.send(
+  //   new DeleteFunctionCommand({ FunctionName: names.fileParserLambdaName })
+  // );
 
   await Lambda.send(
     new DeleteFunctionCommand({

@@ -90,7 +90,7 @@ export const catalogBatchProcessLambda = async () => {
           FunctionName,
           EventSourceArn: Attributes.QueueArn,
           BatchSize: 5,
-          MaximumBatchingWindowInSeconds: 5,
+          MaximumBatchingWindowInSeconds: 10,
         });
 
         await client.send(trigger);

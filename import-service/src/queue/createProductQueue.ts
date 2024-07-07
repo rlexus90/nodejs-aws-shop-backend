@@ -12,7 +12,7 @@ export const createProductQueue = async () => {
   const command = new CreateQueueCommand({
     QueueName,
     Attributes: {
-      // DelaySeconds: '1',
+      // DelaySeconds: '2',
       ReceiveMessageWaitTimeSeconds: '20',
     },
   });

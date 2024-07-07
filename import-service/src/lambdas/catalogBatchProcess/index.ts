@@ -18,8 +18,9 @@ export const handler = async (event: SQSEvent) => {
 
   const result = Records.map((record) => writeToDB(JSON.parse(record.body)));
 
-  await Promise.all(result);
+  const antort = await Promise.all(result);
   console.log(`Done ${Records.length}`);
+  console.log(antort);
 };
 
 async function writeToDB(data: ProductIncome) {
@@ -53,9 +54,11 @@ async function writeToDB(data: ProductIncome) {
       );
 
       console.log('updated');
+      return 'updated';
     } catch (err) {
       console.log(err);
       console.log('Error');
+      return 'Error';
     }
   } else {
     const id = uuid.v4();
@@ -86,9 +89,11 @@ async function writeToDB(data: ProductIncome) {
       );
 
       console.log('Created');
+      return 'created';
     } catch (err) {
       console.log(err);
       console.log('Error');
+      return 'Error';
     }
   }
 }

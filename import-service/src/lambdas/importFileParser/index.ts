@@ -20,6 +20,7 @@ export const handler = async (event: S3Event) => {
   );
   const fileName = source.split('/')[1].toString();
   console.log(fileName);
+  console.log(source);
 
   try {
     const getObjResp = await client.send(

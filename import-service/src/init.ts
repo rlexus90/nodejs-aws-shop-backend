@@ -4,6 +4,7 @@ import { catalogBatchProcessLambda } from './lambdas/catalogBatchProcess-lambda'
 import { fileParserLambda } from './lambdas/fileParser-lambda';
 import { importLambda } from './lambdas/import-lambda';
 import { createProductQueue } from './queue/createProductQueue';
+import { createEmailNotification } from './queue/emailNotification';
 
 async function init() {
   console.log('\x1b[32m');
@@ -12,6 +13,7 @@ async function init() {
   await fileParserLambda();
   await createProductQueue();
   await catalogBatchProcessLambda();
+  await createEmailNotification();
   // await api();
 }
 
