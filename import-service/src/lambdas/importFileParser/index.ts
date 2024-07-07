@@ -6,10 +6,13 @@ import {
 } from '@aws-sdk/client-s3';
 import { S3Event } from 'aws-lambda';
 import * as CSV from 'csv-string';
-import { createProduct } from '../../lib/createProduct';
 import { ProductIncome } from '../../lib/transformProduct';
+import { sendMessage } from '../../lib/sendMessage';
+import { GetQueueUrlCommand, SQSClient } from '@aws-sdk/client-sqs';
+import { names } from '../../constants';
 
 export const handler = async (event: S3Event) => {
+  const SQS = new SQSClient();
   const client = new S3Client();
   const Bucket = event.Records[0].s3.bucket.name;
   const source = decodeURIComponent(
@@ -32,7 +35,17 @@ export const handler = async (event: S3Event) => {
     });
 
     console.log(products);
-    products.map((product) => createProduct(product as ProductIncome));
+
+    const { QueueUrl } = await SQS.send(
+      new GetQueueUrlCommand({
+        QueueName: names.queueName,
+      })
+    );
+
+    const stack = products.map((product) =>
+      sendMessage(product as ProductIncome, QueueUrl)
+    );
+    await Promise.all(stack);
   } catch (err) {
     console.log(err);
   }

@@ -11,7 +11,7 @@ import path = require('path');
 import { names } from '../constants';
 
 export const importLambda = async () => {
-	const FunctionName = names.importLambdaName;
+  const FunctionName = names.importLambdaName;
   const client = new LambdaClient({});
   const code = await readFile(
     path.resolve(__dirname, '../../dist', 'import-file.zip')

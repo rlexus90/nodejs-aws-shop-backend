@@ -1,4 +1,8 @@
-import { CreateQueueCommand, SQSClient } from '@aws-sdk/client-sqs';
+import {
+  CreateQueueCommand,
+  GetQueueUrlCommand,
+  SQSClient,
+} from '@aws-sdk/client-sqs';
 import { names } from '../constants';
 
 export const createProductQueue = async () => {
@@ -9,14 +13,23 @@ export const createProductQueue = async () => {
     QueueName,
     Attributes: {
       // DelaySeconds: '1',
+      ReceiveMessageWaitTimeSeconds: '20',
     },
   });
 
   try {
-    await client.send(command);
-    console.log('Create-product-queue created');
-  } catch (err) {
-    console.log(err);
-    console.error('Create-product-queue exist');
+    const { QueueUrl } = await client.send(
+      new GetQueueUrlCommand({
+        QueueName,
+      })
+    );
+    console.log('Create-product-queue exist');
+  } catch {
+    try {
+      await client.send(command);
+      console.log('Create-product-queue created');
+    } catch (err) {
+      console.log(err);
+    }
   }
 };

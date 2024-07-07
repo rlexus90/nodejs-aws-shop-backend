@@ -3,8 +3,8 @@ import { handler as parserFn } from '../src/lambdas/importFileParser/index';
 import { MockFile, mockEvent } from './mockData';
 import { mockClient } from 'aws-sdk-client-mock';
 
-jest.mock('../src/lib/createProduct');
-import { createProduct } from '../src/lib/createProduct';
+jest.mock('../src/lib/sendMessage');
+import { sendMessage } from '../src/lib/sendMessage';
 
 jest.mock('@aws-sdk/client-s3');
 import {
@@ -25,7 +25,7 @@ describe('Parser Test', () => {
     expect(GetObjectCommand).toHaveBeenCalled();
     expect(CopyObjectCommand).toHaveBeenCalled();
     expect(DeleteObjectCommand).toHaveBeenCalled();
-    expect(createProduct).toHaveBeenCalledTimes(5);
+    expect(sendMessage).toHaveBeenCalledTimes(5);
     expect(true).toBe(true);
   });
 });

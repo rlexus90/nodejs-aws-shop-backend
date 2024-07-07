@@ -2,17 +2,27 @@ import {
   Architecture,
   CreateEventSourceMappingCommand,
   CreateFunctionCommand,
+  GetEventSourceMappingCommand,
   LambdaClient,
+  ListEventSourceMappingsCommand,
   PackageType,
   Runtime,
   UpdateFunctionCodeCommand,
 } from '@aws-sdk/client-lambda';
-import { GetQueueUrlCommand, SQSClient } from '@aws-sdk/client-sqs';
+import {
+  GetQueueAttributesCommand,
+  GetQueueUrlCommand,
+  SQSClient,
+} from '@aws-sdk/client-sqs';
 import { readFile } from 'fs/promises';
 import path = require('path');
 import { names } from '../constants';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export const catalogBatchProcessLambda = async () => {
+  const { PRODUCTS_DB, STOCKS_DB } = process.env;
   const client = new LambdaClient({});
   const code = await readFile(
     path.resolve(__dirname, '../../dist', 'catalogBatchProcess.zip')
@@ -28,6 +38,12 @@ export const catalogBatchProcessLambda = async () => {
     Handler: 'catalogBatchProcess/index.handler',
     PackageType: PackageType.Zip,
     Runtime: Runtime.nodejs20x,
+    Environment: {
+      Variables: {
+        PRODUCTS_DB: PRODUCTS_DB || 'string',
+        STOCKS_DB: STOCKS_DB || 'string',
+      },
+    },
   });
 
   const update = new UpdateFunctionCodeCommand({
@@ -35,8 +51,6 @@ export const catalogBatchProcessLambda = async () => {
     FunctionName,
     Architectures: [Architecture.arm64],
   });
-
-
 
   try {
     await client.send(update);
@@ -50,16 +64,39 @@ export const catalogBatchProcessLambda = async () => {
     }
   }
 
-  try{
-const clientSQS = new SQSClient();
-const resp = await clientSQS.send(new GetQueueUrlCommand({
-  QueueName:
-}))
+  const { EventSourceMappings } = await client.send(
+    new ListEventSourceMappingsCommand({
+      FunctionName,
+    })
+  );
 
-    // const trigger = new CreateEventSourceMappingCommand({
-    // FunctionName,
-    // })
-  }catch(err){
-    console.error(err);
+  if (EventSourceMappings?.length === 0) {
+    try {
+      const clientSQS = new SQSClient();
+      const { QueueUrl } = await clientSQS.send(
+        new GetQueueUrlCommand({
+          QueueName: names.queueName,
+        })
+      );
+      const { Attributes } = await clientSQS.send(
+        new GetQueueAttributesCommand({
+          QueueUrl,
+          AttributeNames: ['QueueArn'],
+        })
+      );
+
+      if (Attributes?.QueueArn) {
+        const trigger = new CreateEventSourceMappingCommand({
+          FunctionName,
+          EventSourceArn: Attributes.QueueArn,
+          BatchSize: 5,
+          MaximumBatchingWindowInSeconds: 5,
+        });
+
+        await client.send(trigger);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
