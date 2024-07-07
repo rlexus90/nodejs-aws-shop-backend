@@ -7,8 +7,9 @@
   "scripts": {
     "create:bd": "cd product-service && npm run create-bd:all",
     "fill:bd": "cd product-service && npm run fill:bd",
+		"deploy:import-service": "cd import-service && npm run deploy",
     "deploy:product-service": "cd product-service && npm run deploy",
-    "deploy": "npm run deploy:product-service"
+    "deploy": "npm run deploy:product-service && npm run deploy:import-service"
   },
   "devDependencies": {},
   "dependencies": {}

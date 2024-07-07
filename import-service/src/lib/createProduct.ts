@@ -2,7 +2,6 @@ import axios from 'axios';
 import { createProductPath } from '../constants';
 import {
   ProductIncome,
-  ProductOutcome,
   transformProduct,
 } from './transformProduct';
 

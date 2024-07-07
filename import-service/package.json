@@ -6,7 +6,7 @@
     "watch": "tsc -w",
     "test": "jest",
     "prettier": "prettier --write '*/**/*.{js,jsx,ts,tsx,css,json,scss}' --config ./.prettierrc",
-    "deploy": "npm run prettier && webpack && ts-node src/index.ts "
+    "deploy": "npm run prettier && webpack && ts-node src/init.ts "
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.140",
