@@ -1,9 +1,6 @@
 import axios from 'axios';
 import { createProductPath } from '../constants';
-import {
-  ProductIncome,
-  transformProduct,
-} from './transformProduct';
+import { ProductIncome, transformProduct } from './transformProduct';
 
 export const createProduct = async (product: ProductIncome) => {
   try {

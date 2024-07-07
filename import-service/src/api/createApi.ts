@@ -10,6 +10,7 @@ import {
 import { GetFunctionCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { access, writeFile } from 'fs/promises';
 import path = require('path');
+import { names } from '../constants';
 
 export const createApi = async () => {
   const client = new ApiGatewayV2Client({});
@@ -19,13 +20,13 @@ export const createApi = async () => {
     const clientLambda = new LambdaClient({});
     const resp = await clientLambda.send(
       new GetFunctionCommand({
-        FunctionName: 'Import-product-lambda',
+        FunctionName: names.importLambdaName,
       })
     );
     const arn = resp.Configuration?.FunctionArn;
 
     const command = new CreateApiCommand({
-      Name: 'Import product API',
+      Name: names.apiName,
       ProtocolType: ProtocolType.HTTP,
     });
 
