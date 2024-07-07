@@ -19,9 +19,9 @@ export const validateBody = (body: string | undefined): void | object => {
     : messages.push('"count" required and must be Integer');
   count >= 0 ? null : messages.push('"count" must be 0 or bigger');
 
-  price && Number.isInteger(price)
+  price && Number.isFinite(price)
     ? null
-    : messages.push('"price" required and must be Integer');
+    : messages.push('"price" required and must be Number');
   price >= 0 ? null : messages.push('"price" must be 0 or bigger');
 
   description && typeof description === 'string'

@@ -32,7 +32,7 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
     const id = uuid.v4();
     const product: ProductDB = {
       id,
-      price,
+      price: Math.trunc(price * 100) / 100,
       description,
       title,
     };
