@@ -1,30 +1,53 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import {
-  DynamoDBDocumentClient,
-  PutCommand,
-  TransactWriteCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { SQSEvent } from 'aws-lambda';
 import * as uuid from 'uuid';
 import { ProductDB, ProductIncome, StocksDB } from '../../lib/transformProduct';
+import {
+  ListTopicsCommand,
+  PublishCommand,
+  SNSClient,
+} from '@aws-sdk/client-sns';
+import { names } from '../../constants';
+
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client);
+const sns = new SNSClient();
+const Name = names.emailNotify;
 const { PRODUCTS_DB, STOCKS_DB } = process.env;
 
 export const handler = async (event: SQSEvent) => {
   const { Records } = event;
   console.log(`Messages count ${Records.length}`);
 
-  const result = Records.map((record) => writeToDB(JSON.parse(record.body)));
+  const stack = Records.map((record) => writeToDB(JSON.parse(record.body)));
 
-  const antort = await Promise.all(result);
-  console.log(`Done ${Records.length}`);
-  console.log(antort);
+  const result = await Promise.all(stack);
+
+  const { Topics } = await sns.send(new ListTopicsCommand());
+  const topic = Topics?.find((el) => el.TopicArn?.includes(Name));
+  const TopicArn = topic ? topic.TopicArn : null;
+
+  if (TopicArn)
+    await sns.send(
+      new PublishCommand({
+        TopicArn,
+        Message: JSON.stringify({ result: result.join(' ') }),
+      })
+    );
+
+  console.log(result);
+
+  return result;
 };
 
 async function writeToDB(data: ProductIncome) {
-  if (!(Number.isFinite(Number(data.price)) && Number(data.price) >= 0)) return;
+  if (!(Number.isFinite(Number(data.price)) && Number(data.price) >= 0))
+    return Promise.resolve('Wrong message');
 
   if (data.id) {
     const product: ProductDB = {
@@ -54,7 +77,7 @@ async function writeToDB(data: ProductIncome) {
       );
 
       console.log('updated');
-      return 'updated';
+      return Promise.resolve('updated');
     } catch (err) {
       console.log(err);
       console.log('Error');
@@ -89,7 +112,7 @@ async function writeToDB(data: ProductIncome) {
       );
 
       console.log('Created');
-      return 'created';
+      return Promise.resolve('created');
     } catch (err) {
       console.log(err);
       console.log('Error');

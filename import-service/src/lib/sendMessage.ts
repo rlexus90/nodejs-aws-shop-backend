@@ -1,10 +1,5 @@
-import { names } from '../constants';
-import { ProductIncome, transformProduct } from './transformProduct';
-import {
-  GetQueueUrlCommand,
-  SQSClient,
-  SendMessageCommand,
-} from '@aws-sdk/client-sqs';
+import { ProductIncome } from './transformProduct';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 
 export const sendMessage = async (
   product: ProductIncome,
@@ -12,16 +7,12 @@ export const sendMessage = async (
 ) => {
   const client = new SQSClient();
 
-  try {
-    if (QueueUrl) {
-      const resp = await client.send(
-        new SendMessageCommand({
-          QueueUrl,
-          MessageBody: JSON.stringify(product),
-        })
-      );
-    }
-  } catch (err) {
-    console.log(err);
-  }
+  if (QueueUrl)
+    return client.send(
+      new SendMessageCommand({
+        QueueUrl,
+        MessageBody: JSON.stringify(product),
+      })
+    );
+  return;
 };

@@ -1,5 +1,16 @@
-import { CreateTopicCommand, GetTopicAttributesCommand, SNSClient } from '@aws-sdk/client-sns';
+import {
+  CreateTopicCommand,
+  GetTopicAttributesCommand,
+  ListTopicsCommand,
+  SNSClient,
+  SubscribeCommand,
+} from '@aws-sdk/client-sns';
 import { names } from '../constants';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const { EMAIL_CREATE, EMAIL_UPDATE } = process.env;
 
 export const createEmailNotification = async () => {
   const client = new SNSClient();
@@ -10,19 +21,36 @@ export const createEmailNotification = async () => {
   });
 
   try {
-await client.send(command);
+    await client.send(command);
 
-const {}=await client.send{new GetTopicAttributesCommand({
-	
-})}
-    console.log(resp);
+    const { Topics } = await client.send(new ListTopicsCommand());
+    const topic = Topics?.find((el) => el.TopicArn?.includes(Name));
+    const TopicArn = topic ? topic.TopicArn : null;
+    if (!TopicArn) return;
+
+    await client.send(
+      new SubscribeCommand({
+        TopicArn,
+        Protocol: 'email',
+        Endpoint: EMAIL_UPDATE,
+      })
+    );
+
+    await client.send(
+      new SubscribeCommand({
+        TopicArn,
+        Protocol: 'email',
+        Endpoint: EMAIL_CREATE,
+        Attributes: {
+          FilterPolicy: JSON.stringify({
+            result: [{ prefix: 'Wrong message' }],
+          }),
+        },
+      })
+    );
+
+    console.log(`${Name} created`);
   } catch (err) {
     console.log(err);
-    // try {
-    //   await client.send(command);
-    //   console.log('Create-product-queue created');
-    // } catch (err) {
-    //   console.log(err);
-    // }
   }
 };

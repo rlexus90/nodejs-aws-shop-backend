@@ -8,13 +8,13 @@ import { createEmailNotification } from './queue/emailNotification';
 
 async function init() {
   console.log('\x1b[32m');
-  // await bucket();
-  // await importLambda();
+  await bucket();
+  await importLambda();
   await fileParserLambda();
   await createProductQueue();
   await catalogBatchProcessLambda();
   await createEmailNotification();
-  // await api();
+  await api();
 }
 
 init();

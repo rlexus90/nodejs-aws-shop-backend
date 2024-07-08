@@ -26,6 +26,5 @@ describe('Parser Test', () => {
     expect(CopyObjectCommand).toHaveBeenCalled();
     expect(DeleteObjectCommand).toHaveBeenCalled();
     expect(sendMessage).toHaveBeenCalledTimes(5);
-    expect(true).toBe(true);
   });
 });
