@@ -29,3 +29,17 @@ export const api = async () => {
     await createApi();
   }
 };
+
+export const returnApiId = async () => {
+  const infoFile = path.resolve(__dirname, 'info.txt');
+
+  try {
+    await access(infoFile);
+    const key = await readFile(infoFile, {
+      encoding: 'utf-8',
+    });
+    return key;
+  } catch {
+    return;
+  }
+};
