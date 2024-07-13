@@ -18,25 +18,25 @@ const destroy = async () => {
   const Api = new ApiGatewayV2Client();
   const Queue = new SQSClient();
 
-  // await S3.send(new DeleteBucketCommand({Bucket: names.bucketName}));
+  await S3.send(new DeleteBucketCommand({Bucket: names.bucketName}));
 
-  // const ApiId = await returnApiId();
-  // if(ApiId) await Api.send(new DeleteApiCommand({ApiId,}));
+  const ApiId = await returnApiId();
+  if(ApiId) await Api.send(new DeleteApiCommand({ApiId,}));
 
-  // try {
-  //   const { QueueUrl } = await Queue.send(
-  //     new GetQueueUrlCommand({
-  //       QueueName: names.queueName,
-  //     })
-  //   );
-  //   if (QueueUrl) await Queue.send(new DeleteQueueCommand({ QueueUrl }));
-  // } catch {}
+  try {
+    const { QueueUrl } = await Queue.send(
+      new GetQueueUrlCommand({
+        QueueName: names.queueName,
+      })
+    );
+    if (QueueUrl) await Queue.send(new DeleteQueueCommand({ QueueUrl }));
+  } catch {}
 
-  // await Lambda.send(new DeleteFunctionCommand({FunctionName:names.importLambdaName}));
+  await Lambda.send(new DeleteFunctionCommand({FunctionName:names.importLambdaName}));
 
-  // await Lambda.send(
-  //   new DeleteFunctionCommand({ FunctionName: names.fileParserLambdaName })
-  // );
+  await Lambda.send(
+    new DeleteFunctionCommand({ FunctionName: names.fileParserLambdaName })
+  );
 
   await Lambda.send(
     new DeleteFunctionCommand({
