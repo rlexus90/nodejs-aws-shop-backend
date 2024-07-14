@@ -10,7 +10,7 @@
     "destroy": "ts-node src/destroy.ts "
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.140",
+    "@types/aws-lambda": "^8.10.141",
     "@types/jest": "^29.5.12",
     "@types/node": "20.14.2",
     "@types/uuid": "^10.0.0",

@@ -1,9 +1,13 @@
 import { APIGatewayRequestAuthorizerEventV2 } from 'aws-lambda';
 
 export const handler = async (event: APIGatewayRequestAuthorizerEventV2) => {
-  const credentials = event.identitySource[0].split(' ')[1];
+  if (!event.identitySource[0])
+    return {
+      isAuthorized: false,
+    };
 
-  try {
+    try {
+    const credentials = event.identitySource[0].split(' ')[1];
     const encodedCredentials = atob(credentials);
     const [login, password] = encodedCredentials.split('=');
 
