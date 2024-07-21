@@ -34,7 +34,7 @@ export class GetProductsAPI extends Construct {
 
     api.addRoutes({
       path: '/products',
-      methods: [apigateway.HttpMethod.POST],
+      methods: [apigateway.HttpMethod.POST, apigateway.HttpMethod.PUT],
       integration: createProduct,
     });
   }
