@@ -36,7 +36,7 @@ export const handler = async (event: SQSEvent) => {
     await sns.send(
       new PublishCommand({
         TopicArn,
-        Message: JSON.stringify({ result: result.join(',') }),
+        Message: JSON.stringify({ result: result.join(', ') }),
       })
     );
 
