@@ -10,10 +10,9 @@
 "esModuleInterop": true,
 		"noImplicitAny": false,
     "noImplicitThis": true,
-
+		"noImplicitReturns": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": false,
     "sourceMap": true,
     "strictPropertyInitialization": false,

@@ -13,7 +13,10 @@ export class AwsApiStack extends cdk.Stack {
 const cartServiceLambda = new Function(this, 'CartServiceLambda', {
   runtime: Runtime.NODEJS_20_X,
   code: Code.fromAsset('./dist'),
-  handler: 'main.handler'
+  handler: 'main.handler',
+	environment:{
+		PRISMA_CLI_BINARY_TARGETS:'native,rhel-openssl-1.0.x'
+	}
 });
 
 const api = new RestApi(this, 'CartServiceAPI',{

@@ -8,15 +8,8 @@ import { OrderModule } from './order/order.module';
 import { DataBaseModule } from './data-base/data-base.module';
 
 @Module({
-  imports: [
-    AuthModule,
-    CartModule,
-    OrderModule,
-    DataBaseModule,
-  ],
-  controllers: [
-    AppController,
-  ],
+  imports: [AuthModule, CartModule, OrderModule, DataBaseModule],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
