@@ -1,6 +1,11 @@
-title,description,price,count
-First product,Description for first product,10,1
-Five product,Description for five product,50,5
-Fourth product,Description for fourth product,40,4
-Second product,Description for second product,20,2
-Three product,Description for three product,30,3
+title,description,price,count,id
+First product,Description for first product,1,3,8843d285-4723-4a42-b782-1c6f92bb38a0
+Five product,Description for five product,5,3,f9d4ba7b-99e8-43e4-8a96-f65dfd95642d
+Fourth product,Description for fourth product,4,3,f53695f9-244c-4470-8aba-1d3320265ad9
+Second product,Description for second product,2,0,2abf938e-7c9e-433b-a562-e7a491c04390
+Three product,Description for three product,3,3,030157cb-1b06-4c06-8bdd-905941f5090d
+product,Description for first product,6,6,9c3c7ec6-0afa-4219-9007-9f7356775cb2
+product,Description for five product,-7,7,f492fa5d-976e-4b2c-8907-828f8906a533
+product,Description for fourth product,8,8
+product,Description for second product,9,9
+product,Description for three product,10,10

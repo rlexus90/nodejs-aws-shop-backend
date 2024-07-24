@@ -8,7 +8,7 @@ export const returnResponse = (
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods:': 'POST, GET, OPTIONS',
+        'Access-Control-Allow-Methods:': 'POST, GET, OPTIONS, PUT',
       },
       body,
     };
@@ -18,7 +18,7 @@ export const returnResponse = (
     headers: {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods:': 'POST, GET, OPTIONS',
+      'Access-Control-Allow-Methods:': 'POST, GET, OPTIONS, PUT',
     },
     body: JSON.stringify(body),
   };
