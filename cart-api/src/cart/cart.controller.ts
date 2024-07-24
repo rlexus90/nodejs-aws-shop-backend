@@ -32,6 +32,7 @@ export class CartController {
       getUserIdFromRequest(req),
     );
     console.log('get cart');
+    if (!cart) return { message: 'You must provide user in headers' };
     return { cart, total: calculateCartTotal(cart) };
   }
 
@@ -45,6 +46,8 @@ export class CartController {
       getUserIdFromRequest(req),
       body,
     );
+
+    if (!cart) return { message: 'You must provide user in headers' };
     return {
       cart,
       total: calculateCartTotal(cart),
@@ -54,8 +57,8 @@ export class CartController {
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Delete()
-  clearUserCart(@Req() req: AppRequest) {
-    this.cartService.removeByUserId(getUserIdFromRequest(req));
+  async clearUserCart(@Req() req: AppRequest) {
+    await this.cartService.removeByUserId(getUserIdFromRequest(req));
     console.log('clear cart');
     return {
       statusCode: HttpStatus.OK,
@@ -66,10 +69,13 @@ export class CartController {
   // @UseGuards(JwtAuthGuard)
   // @UseGuards(BasicAuthGuard)
   @Post('checkout')
-  checkout(@Req() req: AppRequest, @Body() body) {
-    const userId = getUserIdFromRequest(req);
-    const cart = this.cartService.findByUserId(userId);
+  async checkout(@Req() req: AppRequest, @Body() body) {
     console.log('checkout');
+    const userId = getUserIdFromRequest(req);
+    if (!userId) return { message: 'You must provide user in headers' };
+
+    const cart = await this.cartService.findByUserId(userId);
+    if (!cart) return { message: 'Cart not found' };
 
     if (!(cart && cart.items.length)) {
       const statusCode = HttpStatus.BAD_REQUEST;
@@ -81,16 +87,25 @@ export class CartController {
       };
     }
 
-    const { id: cartId, items } = cart;
+    const { id: cartId } = cart;
     const total = calculateCartTotal(cart);
-    const order = this.orderService.create({
-      ...body, // TODO: validate and pick only necessary data
-      userId,
-      cartId,
-      items,
+
+    const { address } = body;
+
+    const order = await this.orderService.create({
+      address,
+      user_id: userId,
+      cart_id: cartId,
       total,
     });
-    this.cartService.removeByUserId(userId);
+
+    if (!order)
+      return {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: 'Something went wrong...',
+      };
+
+    await this.cartService.setStatusORDERED(userId);
 
     return {
       statusCode: HttpStatus.OK,

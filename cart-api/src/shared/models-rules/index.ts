@@ -6,4 +6,5 @@ import { AppRequest } from '../models';
  */
 export function getUserIdFromRequest(request: AppRequest): string {
   if (typeof request.headers.user === 'string') return request.headers.user;
+  return '';
 }

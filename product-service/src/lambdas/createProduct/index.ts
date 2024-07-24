@@ -16,6 +16,16 @@ dotenv.config();
 export const handler = async (event: APIGatewayProxyEventV2) => {
   logger(event);
 
+  if (event.requestContext.http.method === 'OPTIONS') {
+    return {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+      },
+      statusCode: 200,
+    };
+  }
+
   const err = validateBody(event.body);
   if (err) return returnResponse(400, err);
 

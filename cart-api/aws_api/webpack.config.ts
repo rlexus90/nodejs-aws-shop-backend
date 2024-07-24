@@ -7,12 +7,14 @@ module.exports = function (options, webpack) {
   ];
 
 	const TerserPlugin = require('terser-webpack-plugin');
+	const nodeExternals = require('webpack-node-externals');
+	const CopyPlugin = require('copy-webpack-plugin')
 
 
   return {
     ...options,
     entry: ['lambdas/cartService/index.ts'],
-    externals: [],
+    externals: [nodeExternals()],
 		optimization: {
 			minimizer: [
 				new TerserPlugin({
@@ -33,6 +35,11 @@ module.exports = function (options, webpack) {
           return lazyImports.includes(resource);
         },
       }),
+			new CopyPlugin({
+				patterns: [
+					{ from: './node_modules/.prisma/client/schema.prisma', to: './' }, 
+				],
+			}),
     ],
   };
 };

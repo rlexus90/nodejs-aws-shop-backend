@@ -6,15 +6,15 @@ import { Cart, CartItem, CartStatuses } from '../models';
 import { PrismaService } from '../../data-base/prisma/prisma.service';
 import axios from 'axios';
 import { apiPath } from '../../constants';
+import { errorMonitor } from 'events';
 
 @Injectable()
 export class CartService {
   constructor(private prisma: PrismaService) {}
 
-  private userCarts: Record<string, Cart> = {};
-
-  findByUserId(userId: string): Cart {
-    return this.userCarts[userId];
+  async findByUserId(userId: string): Promise<Cart> {
+    if (!userId) return;
+    return this.findOrCreateByUserId(userId);
   }
 
   async createByUserId(userId: string) {
@@ -62,12 +62,16 @@ export class CartService {
   }
 
   async updateByUserId(userId: string, item: CartItem): Promise<Cart> {
+    if (!userId) return;
     const { id, ...rest } = await this.findOrCreateByUserId(userId);
 
     const updatedCart = {
       id,
       ...rest,
-      items: [...rest.items, item],
+      items: [
+        ...rest.items.filter((el) => el.product.id !== item.product.id),
+        item,
+      ],
     };
 
     try {
@@ -108,7 +112,35 @@ export class CartService {
     return { ...updatedCart };
   }
 
-  removeByUserId(userId): void {
-    this.userCarts[userId] = null;
+  async removeByUserId(userId: string): Promise<void> {
+    if (!userId) return;
+
+    try {
+      const userCart = await this.prisma.cart.findFirst({
+        where: { user_id: userId, status: CartStatuses.OPEN },
+        include: { items: true },
+      });
+      if (userCart)
+        await this.prisma.cart.delete({ where: { id: userCart.id } });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async setStatusORDERED(userId: string) {
+    try {
+      const userCart = await this.prisma.cart.findFirst({
+        where: { user_id: userId, status: CartStatuses.OPEN },
+        include: { items: true },
+      });
+
+      if (userCart)
+        await this.prisma.cart.update({
+          where: { id: userCart.id },
+          data: { status: CartStatuses.ORDERED },
+        });
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
