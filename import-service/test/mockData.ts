@@ -17,3 +17,41 @@ export const mockEvent = {
     },
   ],
 };
+
+export const v = JSON.stringify({
+  id: '585013bc-e050-4bf6-b79f-c28c49b93931',
+  title: 'Fourth product',
+  description: 'Description for fourth product',
+  price: '5',
+  count: '4',
+});
+
+export const SQSEventMock = {
+  Records: [
+    {
+      body: JSON.stringify({
+        id: '585013bc-e050-4bf6-b79f-c28c49b93931',
+        title: 'Fourth product',
+        description: 'Description for fourth product',
+        price: '5',
+        count: '4',
+      }),
+    },
+    {
+      body: JSON.stringify({
+        title: 'Fourth product',
+        description: 'Description for fourth product',
+        price: '5',
+        count: '4',
+      }),
+    },
+    {
+      body: JSON.stringify({
+        title: 'Fourth product',
+        description: 'Description for fourth product',
+        price: '-5',
+        count: '4',
+      }),
+    },
+  ],
+};

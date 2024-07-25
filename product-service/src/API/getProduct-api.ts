@@ -18,7 +18,21 @@ export class GetProductsAPI extends Construct {
     const createProduct = new CreateProductLambda(this, 'Create Product')
       .integration;
 
-    const api = new apigateway.HttpApi(scope, 'Get Products API');
+    const api = new apigateway.HttpApi(scope, 'Get Products API', {
+      corsPreflight: {
+        allowHeaders: [
+          'Content-Type',
+          'X-Amz-Date',
+          'Authorization',
+          'X-Api-Key',
+          'X-Amz-Security-Token',
+          'user',
+          '*',
+        ],
+        allowMethods: [apigateway.CorsHttpMethod.ANY],
+        allowOrigins: ['*'],
+      },
+    });
 
     api.addRoutes({
       path: '/products',
@@ -34,7 +48,11 @@ export class GetProductsAPI extends Construct {
 
     api.addRoutes({
       path: '/products',
-      methods: [apigateway.HttpMethod.POST],
+      methods: [
+        apigateway.HttpMethod.POST,
+        apigateway.HttpMethod.PUT,
+        apigateway.HttpMethod.OPTIONS,
+      ],
       integration: createProduct,
     });
   }

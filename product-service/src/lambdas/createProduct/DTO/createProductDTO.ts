@@ -1,4 +1,5 @@
 export type CreateProductDTO = {
+  id: string | undefined;
   count: number;
   description: string;
   price: number;

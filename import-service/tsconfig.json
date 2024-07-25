@@ -27,6 +27,7 @@
 	// "include": ["src/lambdas/**/*.ts"],
   "exclude": [
     "node_modules",
-    "cdk.out"
+    "cdk.out",
+		// "test"
   ]
 }
