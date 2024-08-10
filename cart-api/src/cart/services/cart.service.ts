@@ -46,11 +46,14 @@ export class CartService {
               try{const res = await axios.get(
                 `${apiPath.products}/products/${item.product_id}`,
               );
-              return { product: res.data, count: item.count } as CartItem;}catch{
-								return { product: undefined, count: undefined }
+              return { product: res.data, count: item.count } as CartItem;}
+							catch{
+								return null
 							}
             }),
           );
+
+					items.filter((el)=> el);
 
           return { ...userCart, items } as unknown as Cart;
         }

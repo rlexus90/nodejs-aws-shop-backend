@@ -3,10 +3,15 @@ import axios from 'axios';
 
 @Injectable()
 export class ProductService {
+  private products = [];
+
   async getAll() {
     console.log('Get products');
+    if (this.products.length > 0) return this.products;
     try {
       const resp = await axios.get(`${process.env.PRODUCT}/products`);
+      this.products = resp.data;
+      setTimeout(() => (this.products = []), 120000);
       return resp.data;
     } catch (e) {
       throw new HttpException(e, HttpStatus.INTERNAL_SERVER_ERROR);
