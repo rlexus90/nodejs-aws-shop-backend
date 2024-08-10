@@ -43,10 +43,12 @@ export class CartService {
         if (dbItems.length > 0) {
           const items = await Promise.all(
             dbItems.map(async (item) => {
-              const res = await axios.get(
+              try{const res = await axios.get(
                 `${apiPath.products}/products/${item.product_id}`,
               );
-              return { product: res.data, count: item.count } as CartItem;
+              return { product: res.data, count: item.count } as CartItem;}catch{
+								return { product: undefined, count: undefined }
+							}
             }),
           );
 
@@ -62,7 +64,7 @@ export class CartService {
   }
 
   async updateByUserId(userId: string, item: CartItem): Promise<Cart> {
-    if (!userId) return;
+		if (!userId) return;
     const { id, ...rest } = await this.findOrCreateByUserId(userId);
 
     const updatedCart = {

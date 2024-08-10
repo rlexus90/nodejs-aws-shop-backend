@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { GetProductsLambda } from '../lambdas/getProducts-lambda';
 import { GetProductsIdLambda } from '../lambdas/getProductId-lambda';
 import { CreateProductLambda } from '../lambdas/createProduct-lambda';
+import { delProductLambda } from '../lambdas/delProduct-lambda';
 
 const { aws_apigatewayv2: apigateway } = cdk;
 
@@ -16,6 +17,9 @@ export class GetProductsAPI extends Construct {
       .integration;
 
     const createProduct = new CreateProductLambda(this, 'Create Product')
+      .integration;
+
+    const delProduct = new delProductLambda(this, 'Del Product by Id')
       .integration;
 
     const api = new apigateway.HttpApi(scope, 'Get Products API', {
@@ -54,6 +58,12 @@ export class GetProductsAPI extends Construct {
         apigateway.HttpMethod.OPTIONS,
       ],
       integration: createProduct,
+    });
+
+    api.addRoutes({
+      path: '/products/{productId}',
+      methods: [apigateway.HttpMethod.DELETE],
+      integration: delProduct,
     });
   }
 }

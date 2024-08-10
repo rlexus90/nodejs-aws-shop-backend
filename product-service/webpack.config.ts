@@ -6,6 +6,7 @@ module.exports = {
     ["getProductsList"]: "./src/lambdas/getProductsList/index.ts",
     ["getProductId"]: "./src/lambdas/getProductId/index.ts",
 		["createProduct"]: "./src/lambdas/createProduct/index.ts",
+		["delProduct"]: "./src/lambdas/delProduct/index.ts",
   },
   target: "node",
   output: {
