@@ -38,3 +38,10 @@ lerna-debug.log*
 !.elasticbeanstalk/*.global.yml
 *.d.ts 
 *.js 
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
