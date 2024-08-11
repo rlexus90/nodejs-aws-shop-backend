@@ -4,19 +4,21 @@ import {
   PutBucketCorsCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { names } from '../constants';
 
 const client = new S3Client({});
+const Bucket = names.bucketName;
 
 export const bucket = async () => {
   const command = new CreateBucketCommand({
-    Bucket: 'aws-shop-import',
+    Bucket,
     CreateBucketConfiguration: {
       LocationConstraint: 'eu-west-2',
     },
   });
 
   const cors = new PutBucketCorsCommand({
-    Bucket: 'aws-shop-import',
+    Bucket,
     CORSConfiguration: {
       CORSRules: [
         {
@@ -33,7 +35,7 @@ export const bucket = async () => {
   try {
     await client.send(
       new GetBucketLocationCommand({
-        Bucket: 'aws-shop-import',
+        Bucket,
       })
     );
     console.log('aws-shop-import exist');

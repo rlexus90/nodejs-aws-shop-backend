@@ -7,6 +7,7 @@ const config = {
   entry: {
     ["import-file"]: "./src/lambdas/import-file/index.ts",
     ["importFileParser"]: "./src/lambdas/importFileParser/index.ts",
+		["catalogBatchProcess"]: "./src/lambdas/catalogBatchProcess/index.ts",
   },
   target: "node",
   output: {

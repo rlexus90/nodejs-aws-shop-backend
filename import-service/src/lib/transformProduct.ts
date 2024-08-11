@@ -10,15 +10,29 @@ export const transformProduct = (product: ProductIncome): ProductOutcome => {
 };
 
 export type ProductIncome = {
+  id?: string;
   title: string;
   description: string;
   price: string;
-  count: string;
+  count?: string;
 };
 
 export type ProductOutcome = {
   title: string;
   description: string;
   price: number;
+  count?: number;
+  id?: string;
+};
+
+export type ProductDB = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+};
+
+export type StocksDB = {
+  product_id: string;
   count: number;
 };

@@ -8,6 +8,7 @@ import {
 } from '@aws-sdk/client-lambda';
 import { readFile } from 'fs/promises';
 import path = require('path');
+import { names } from '../constants';
 
 export const fileParserLambda = async () => {
   const client = new LambdaClient({});
@@ -15,7 +16,7 @@ export const fileParserLambda = async () => {
     path.resolve(__dirname, '../../dist', 'importFileParser.zip')
   );
 
-  const FunctionName = 'File-parser-lambda';
+  const FunctionName = names.fileParserLambdaName;
 
   const create = new CreateFunctionCommand({
     Code: { ZipFile: code },

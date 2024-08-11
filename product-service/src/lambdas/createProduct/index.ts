@@ -16,6 +16,16 @@ dotenv.config();
 export const handler = async (event: APIGatewayProxyEventV2) => {
   logger(event);
 
+  if (event.requestContext.http.method === 'OPTIONS') {
+    return {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+      },
+      statusCode: 200,
+    };
+  }
+
   const err = validateBody(event.body);
   if (err) return returnResponse(400, err);
 
@@ -25,19 +35,19 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
   const docClient = DynamoDBDocumentClient.from(client);
 
   try {
-    const { count, price, description, title } = JSON.parse(
+    const { count, price, description, title, id } = JSON.parse(
       event.body as string
     ) as CreateProductDTO;
 
-    const id = uuid.v4();
+    const productId = id ? id : uuid.v4();
     const product: ProductDB = {
-      id,
+      id: productId,
       price: Math.trunc(price * 100) / 100,
       description,
       title,
     };
     const stock: StocksDB = {
-      product_id: id,
+      product_id: productId,
       count,
     };
 
