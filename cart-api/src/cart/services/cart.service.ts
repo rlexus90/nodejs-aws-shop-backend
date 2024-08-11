@@ -41,19 +41,20 @@ export class CartService {
         const dbItems = userCart.items;
 
         if (dbItems.length > 0) {
-          const items = await Promise.all(
+          const itemsArr = await Promise.all(
             dbItems.map(async (item) => {
-              try{const res = await axios.get(
+              try{
+								const res = await axios.get(
                 `${apiPath.products}/products/${item.product_id}`,
               );
-              return { product: res.data, count: item.count } as CartItem;}
-							catch{
+              return { product: res.data, count: item.count } as CartItem;
+						}
+							catch(e){
 								return null
 							}
             }),
-          );
-
-					items.filter((el)=> el);
+          )
+				const items =	itemsArr.filter((el)=> el);
 
           return { ...userCart, items } as unknown as Cart;
         }

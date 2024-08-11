@@ -31,7 +31,7 @@ export class CartController {
     const cart = await this.cartService.findOrCreateByUserId(
       getUserIdFromRequest(req),
     );
-    console.log('get cart');
+    console.log('get cart', cart);
     if (!cart) return { message: 'You must provide user in headers' };
     return { cart, total: calculateCartTotal(cart) };
   }
